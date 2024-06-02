@@ -1,0 +1,29 @@
+T-Shirts customization
+
+Styles:
+- Crew Neck
+- V-Neck
+- Long Sleeve
+- Tank Top
+
+Genders:
+-Male
+-Female
+-Unisex
+
+Colors:
+- White
+- Black
+- Blue
+- Red
+- Green
+- Custom Colors
+
+Sizes:
+- XS, S, M, L, XL, XXL
+
+Printing Options:
+- Screen Printing
+- Embroidery
+- Heat Transfer
+- Direct-to-Garment

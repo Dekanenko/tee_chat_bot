@@ -1,0 +1,258 @@
+User: I need help with my order. My order number is 12345 and it hasn't arrived yet.
+Assistant: {
+    "response": "I'm sorry to hear that your order hasn't arrived yet. I'll log a support request for you.",
+    "support_request": {
+        "issue": "Order not arrived",
+        "order_number": "12345"
+    }
+}
+
+User: The t-shirt I ordered is missing from my delivery. My order number is 99876.
+Assistant: {
+    "response": "I'm sorry to hear that your t-shirt is missing from the delivery. I'll log a support request for you.",
+    "support_request": {
+        "issue": "Missing item in delivery",
+        "order_number": "99876"
+    }
+}
+
+User: I accidentally ordered the wrong design. My order number is 55443.
+Assistant: {
+    "response": "I understand that you ordered the wrong design. I'll log a support request for you.",
+    "support_request": {
+        "issue": "Wrong design ordered",
+        "order_number": "55443"
+    }
+}
+
+User: My t-shirt was damaged during shipping. My order number is 22334.
+Assistant: {
+    "response": "I'm sorry to hear that your t-shirt was damaged during shipping. I'll log a support request for you.",
+    "support_request": {
+        "issue": "Damaged during shipping",
+        "order_number": "22334"
+    }
+}
+
+User: The quality of the fabric is not as expected. My order number is 66778.
+Assistant: {
+    "response": "I apologize that the fabric quality did not meet your expectations. I'll log a support request for you.",
+    "support_request": {
+        "issue": "Poor fabric quality",
+        "order_number": "66778"
+    }
+}
+
+User: I received someone else's order. My order number is 34567.
+Assistant: {
+    "response": "I'm sorry to hear that you received someone else's order. I'll log a support request for you.",
+    "support_request": {
+        "issue": "Received wrong order",
+        "order_number": "34567"
+    }
+}
+
+User: I received the wrong size for my t-shirt. My order number is 67890.
+Assistant: {
+    "response": "I'm sorry to hear that you received the wrong size. I'll log a support request for you.",
+    "support_request": {
+        "issue": "Wrong size received",
+        "order_number": "67890"
+    }
+}
+
+User: The print on my t-shirt is blurry. My order number is 11223.
+Assistant: {
+    "response": "I apologize that the print on your t-shirt is blurry. I'll log a support request for you.",
+    "support_request": {
+        "issue": "Blurry print",
+        "order_number": "11223"
+    }
+}
+
+User: My t-shirt has not been shipped yet. My order number is 44556.
+Assistant: {
+    "response": "I'm sorry to hear that your t-shirt has not been shipped yet. I'll log a support request for you.",
+    "support_request": {
+        "issue": "Order not shipped",
+        "order_number": "44556"
+    }
+}
+
+User: The color of the t-shirt is different from what I ordered. My order number is 77889.
+Assistant: {
+    "response": "I apologize that the color of the t-shirt is different from what you ordered. I'll log a support request for you.",
+    "support_request": {
+        "issue": "Wrong color received",
+        "order_number": "77889"
+    }
+}
+
+User: I need to change the shipping address for my order. My order number is 33445.
+Assistant: {
+    "response": "Sure, I'll log a support request to change the shipping address for your order.",
+    "support_request": {
+        "issue": "Change shipping address",
+        "order_number": "33445"
+    }
+}
+
+User: What sizes are available?
+Assistant: {
+    "response": "We offer sizes ranging from XS to XXL, including a size chart to help you choose the best fit. Kids' sizes from 2T to XL are also available."
+}
+
+User: Can I add my own design to the t-shirt?
+Assistant: {
+    "response": "Yes, you can upload your design or choose from our library of designs."
+}
+
+User: What materials are the t-shirts made from?
+Assistant: {
+    "response": "Our t-shirts are available in 100% cotton, cotton-polyester blend, and organic cotton."
+}
+
+User: What is the delivery time for a custom t-shirt?
+Assistant: {
+    "response": "Delivery typically takes 1-2 weeks depending on your location."
+}
+
+User: How can I track my order?
+Assistant: {
+    "response": "You can track your order by logging into your account and viewing your order history."
+}
+
+User: Is there a minimum order quantity for custom t-shirts?
+Assistant: {
+    "response": "No, you can order as few as one custom t-shirt."
+}
+
+User: What printing options do you offer?
+Assistant: {
+    "response": "We offer screen printing, embroidery, heat transfer, and direct-to-garment printing."
+}
+
+User: Can I see a preview of my design before placing an order?
+Assistant: {
+    "response": "Yes, our design tool provides a preview of your t-shirt before you finalize your order."
+}
+
+User: Do you offer bulk discounts?
+Assistant: {
+    "response": "Yes, we offer discounts for bulk orders. Please contact our sales team for more information."
+}
+
+User: What is your return policy for custom t-shirts?
+Assistant: {
+    "response": "Custom t-shirts can be returned within 30 days of delivery, provided they are in their original condition."
+}
+
+User: Can I change my order after it has been placed?
+Assistant: {
+    "response": "Changes can be made within 24 hours of placing the order. Please contact customer support for assistance."
+}
+
+User: What payment methods do you accept?
+Assistant: {
+    "response": "We accept major credit cards, PayPal, and Apple Pay."
+}
+
+User: How do I care for my custom t-shirt?
+Assistant: {
+    "response": "We recommend washing your t-shirt inside out in cold water and tumble drying on low to preserve the print."
+}
+
+User: Can I order matching t-shirts for an event?
+Assistant: {
+    "response": "Yes, you can design and order matching t-shirts for events, teams, and groups."
+}
+
+User: Do you offer kids’ sizes?
+Assistant: {
+    "response": "Yes, we offer a range of kids’ sizes from 2T to XL."
+}
+
+User: Are your materials eco-friendly?
+Assistant: {
+    "response": "We offer eco-friendly options like organic cotton and recycled polyester."
+}
+
+User: Can I get assistance with my design?
+Assistant: {
+    "response": "Yes, our design team is available to help you create the perfect t-shirt."
+}
+
+User: What happens if my order is damaged upon arrival?
+Assistant: {
+    "response": "If your order arrives damaged, please contact us with a photo of the damage, and we will send a replacement."
+}
+
+User: Do you ship internationally?
+Assistant: {
+    "response": "Yes, we ship to most countries worldwide. Shipping times and rates may vary."
+}
+
+User: How can I contact customer support?
+Assistant: {
+    "response": "You can reach customer support via email, phone, or live chat on our website."
+}
+
+User: Can I reorder a previous design?
+Assistant: {
+    "response": "Yes, you can easily reorder previous designs by logging into your account and selecting from your order history."
+}
+
+User: Do you offer gift cards?
+Assistant: {
+    "response": "Yes, we offer gift cards that can be purchased and used towards any custom t-shirt order."
+}
+
+User: Are there any special care instructions for eco-friendly materials?
+Assistant: {
+    "response": "For eco-friendly materials like organic cotton, we recommend washing in cold water and hanging to dry to maintain the fabric’s integrity."
+}
+
+User: What is TeeCustomizer?
+Assistant: {
+    "response": "TeeCustomizer is an online platform that allows users to design and order custom t-shirts. We cater to both individual customers and businesses, providing a range of printing options and high-quality materials."
+}
+
+User: How long has TeeCustomizer been in business?
+Assistant: {
+    "response": "TeeCustomizer has been proudly serving customers since 2017."
+}
+
+User: Where is TeeCustomizer located?
+Assistant: {
+    "response": "Our headquarters is located in Riga, Latvia, and we operate multiple production facilities to ensure efficient service and delivery."
+}
+
+User: Can I cancel my order?
+Assistant: {
+    "response": "Orders can be canceled within 24 hours of placing the order. Please contact customer support for assistance."
+}
+
+User: What are your business hours?
+Assistant: {
+    "response": "Our customer support team is available Monday to Friday, 9 AM to 6 PM (local time)."
+}
+
+User: Are there any additional charges for international shipping?
+Assistant: {
+    "response": "Yes, additional shipping charges and customs fees may apply for international orders."
+}
+
+User: Do you offer expedited shipping options?
+Assistant: {
+    "response": "Yes, expedited shipping options are available at an additional cost. Please select the expedited shipping option at checkout."
+}
+
+User: Can I use multiple discount codes on a single order?
+Assistant: {
+    "response": "No, only one discount code can be applied per order."
+}
+
+User: Do you offer design templates?
+Assistant: {
+    "response": "Yes, we offer a variety of design templates to help you get started."
+}
