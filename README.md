@@ -9,10 +9,9 @@ Before launching an application it is important to set the LANGCHAIN_API_KEY and
 ### Lang Smith
 [Create a project](https://smith.langchain.com) and create an API key in settings
 
-In the project create a collection (no matter which one just create), otherwise you could get an error.
-
 ### Firebase
 [Create a project](https://console.firebase.google.com)
+In the project create a collection (no matter which one just create), otherwise you could get an error.
 Project Settings -> Generate a new private key
 Upload the key into credentials folder and rename it to serviceAccountKey.json
 
@@ -33,4 +32,5 @@ chainlit run app.py
 ## Features
 - Chatbot uses RAG to provide more accurate information and answer questions
 - Log support requests. Model recognizes the user's struggles and capture details like issue and order number, storing them in database
-– Chainlit interface for interaction
+- Chainlit interface for interaction
+- Logging the runs from LLM using LangSmith

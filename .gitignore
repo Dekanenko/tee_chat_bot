@@ -6,3 +6,5 @@ __pycache__/
 
 # Ignore credentials
 credentials/serviceAccountKey.json
+
+.DS_Store
