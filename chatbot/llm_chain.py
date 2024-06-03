@@ -78,7 +78,7 @@ Assistant:
         )
 
     def response_parser(self, response, db):
-        if "response" in response['answer']:
+        if "response" in response['answer'] and "}" in response['answer']:
             try:
                 response_json = json.loads(response['answer'])
                 if "support_request" in response['answer']:
@@ -94,7 +94,6 @@ Assistant:
 
     def process_input(self, user_input, db):
         result = self.chain({"question": user_input})
-        print("RAW: \n", result['answer'])
         response = self.response_parser(result, db)
         return response
 
