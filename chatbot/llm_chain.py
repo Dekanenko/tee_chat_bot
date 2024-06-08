@@ -29,14 +29,14 @@ class Chat_bot():
             n_batch=n_batch,
             f16_kv=True,
             temperature=0.1,
-            stop=["Q", "Question", "User:", "Answer", "User's question", "Helpful Answer", "Unhelpful Answer", "Final Answer:", "Use the following pieces of context", "Other Helpful", "```", " } }"]
+            stop=["Q", "Question", "User:", "Answer", "User's question", "Helpful Answer", "Unhelpful Answer", "Final Answer:", "Chat History", "Use the following pieces of context", "Other Helpful", "```", " } }"]
         )
 
 # create prompt
         template = """
 You are a chatbot on a virtual platform selling T-Shirts called TeeCustomizer.
 When asked a question, first search the knowledge base for the most relevant question-answer pair.
-Please answer the user's question and include a support_request attribute if the question is related to a support issue. Keep the answer as concise as possible.
+Please answer the user's question in json format and include a support_request attribute if the question is related to a support issue. Keep the answer as concise as possible.
 
 Example:
 User: I need help with my order. My order number is 12345 and it hasn't arrived yet.
@@ -48,33 +48,34 @@ Assistant: {{
     }}
 }}
 
-Knowledge Base:
-{context}
-
 Chat History:
 {chat_history}
     
-User:{query}
+User:{question}
 Assistant:
 """
-        self.prompt = PromptTemplate(input_variables=["context", "query", "chat_history"], template=template)
+        self.prompt = PromptTemplate(input_variables=["question", "chat_history"], template=template)
         
 # create chain
         self.memory = ConversationBufferMemory(
             memory_key="chat_history",  
             output_key="answer",
             ai_prefix="Assistant",
-            human_prefix="User"
+            human_prefix="User",
+            return_docs=False,
         )
+
+        self.chat_history = []
 
         self.chain = ConversationalRetrievalChain.from_llm(
             self.llm, 
             chain_type="stuff", 
             retriever=self.vecdb.as_retriever(), 
-            return_source_documents=True,
-            memory=self.memory,
             condense_question_prompt=self.prompt,
-            get_chat_history=lambda h : ""
+            memory=self.memory,
+            return_source_documents=True,
+            return_generated_question=True,
+            get_chat_history=lambda h : h
         )
 
     def response_parser(self, response, db):
