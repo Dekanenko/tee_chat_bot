@@ -65,8 +65,6 @@ Assistant:
             return_docs=False,
         )
 
-        self.chat_history = []
-
         self.chain = ConversationalRetrievalChain.from_llm(
             self.llm, 
             chain_type="stuff", 
