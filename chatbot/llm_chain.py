@@ -40,13 +40,13 @@ Please answer the user's question in json format and include a support_request a
 
 Example:
 User: I need help with my order. My order number is 12345 and it hasn't arrived yet.
-Assistant: {{
+Assistant: {
     "response": "I'm sorry to hear that your order hasn't arrived yet. I'll log a support request for you.",
-    "support_request": {{
+    "support_request": {
         "issue": "Order not arrived",
         "order_number": "12345"
-    }}
-}}
+    }
+}
 
 Chat History:
 {chat_history}
@@ -73,7 +73,7 @@ Assistant:
             memory=self.memory,
             return_source_documents=True,
             return_generated_question=True,
-            get_chat_history=lambda h : h
+            get_chat_history=lambda h : ""
         )
 
     def response_parser(self, response, db):
