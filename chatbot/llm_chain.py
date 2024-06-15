@@ -68,12 +68,13 @@ Assistant:
         self.chain = ConversationalRetrievalChain.from_llm(
             self.llm, 
             chain_type="stuff", 
-            retriever=self.vecdb.as_retriever(), 
+            retriever=self.vecdb.as_retriever(search_type="similarity_score_threshold", 
+                                              search_kwargs={"score_threshold": 0.05, "k": 4}), 
             condense_question_prompt=self.prompt,
             memory=self.memory,
             return_source_documents=True,
             return_generated_question=True,
-            get_chat_history=lambda h : h
+            get_chat_history=lambda h : ""
         )
 
     def response_parser(self, response, db):
