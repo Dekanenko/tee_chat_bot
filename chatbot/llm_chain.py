@@ -4,7 +4,9 @@ from langchain_community.embeddings.sentence_transformer import SentenceTransfor
 from langchain_community.llms import LlamaCpp
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
-from langchain.prompts import PromptTemplate
+from langchain.prompts import PromptTemplate, ChatPromptTemplate
+from langchain.schema import HumanMessage, SystemMessage
+from langchain.output_parsers import StructuredOutputParser, ResponseSchema
 
 from chatbot.data_preparation import get_vecdb
 
@@ -29,7 +31,7 @@ class Chat_bot():
             n_batch=n_batch,
             f16_kv=True,
             temperature=0.1,
-            stop=["Q", "Question", "User:", "Answer", "User's question", "Helpful Answer", "Unhelpful Answer", "Final Answer:", "Chat History", "Use the following pieces of context", "Other Helpful", "```", " } }"]
+            stop=["Q", "Question", "User:", "Answer", "User's question", "Helpful Answer", "Unhelpful Answer", "Final Answer:", "Chat History", "Use the following pieces of context", "Other Helpful", "```", " } }", "}\n}\n"]
         )
 
 # create prompt
@@ -38,7 +40,13 @@ You are a chatbot on a virtual platform selling T-Shirts called TeeCustomizer.
 When asked a question, first search the knowledge base for the most relevant question-answer pair.
 Please answer the user's question in json format and include a support_request attribute if the question is related to a support issue. Keep the answer as concise as possible.
 
-Example:
+Example (normal question):
+User: Is there a minimum order quantity for custom t-shirts?
+Assistant: {{
+    "response": "No, you can order as few as one custom t-shirt."
+}}
+
+Example (issue/request):
 User: I need help with my order. My order number is 12345 and it hasn't arrived yet.
 Assistant: {{
     "response": "I'm sorry to hear that your order hasn't arrived yet. I'll log a support request for you.",
@@ -50,12 +58,15 @@ Assistant: {{
 
 Chat History:
 {chat_history}
-    
+
+Context:
+{context}
+
 User:{question}
 Assistant:
 """
-        self.prompt = PromptTemplate(input_variables=["question", "chat_history"], template=template)
-        
+        self.prompt = PromptTemplate(input_variables=["question", "context", "chat_history"], template=template)
+
 # create chain
         self.memory = ConversationBufferMemory(
             memory_key="chat_history",  
@@ -69,16 +80,16 @@ Assistant:
             self.llm, 
             chain_type="stuff", 
             retriever=self.vecdb.as_retriever(search_type="similarity_score_threshold", 
-                                              search_kwargs={"score_threshold": 0.05, "k": 4}), 
-            condense_question_prompt=self.prompt,
+                                              search_kwargs={"score_threshold": 0.05, "k": 3}), 
+            combine_docs_chain_kwargs={"prompt": self.prompt},
             memory=self.memory,
             return_source_documents=True,
             return_generated_question=True,
-            get_chat_history=lambda h : h
+            get_chat_history=lambda h : ""
         )
 
     def response_parser(self, response, db):
-        if "response" in response['answer'] and "}" in response['answer']:
+        if "response" in response['answer'] and ("{" in response['answer'] or "}" in response['answer']):
             try:
                 response_json = json.loads(response['answer'])
                 if "support_request" in response['answer']:
@@ -86,13 +97,21 @@ Assistant:
                     db.collection('supportRequests').add(support_request)
                     
             except json.JSONDecodeError:
-                return "There was an error parsing the response. Please try again."
+                return False, "There was an error parsing the response. Please try again."
             
-            return response_json['response']
+            return True, response_json['response']
         else:
-            return response['answer']
+            return True, response['answer']
 
     def process_input(self, user_input, db):
-        result = self.chain({"question": user_input})
-        response = self.response_parser(result, db)
+        tries = 0
+        correct = False
+        response = "Error occurred. Please try again"
+        while tries <= 3 and not correct:
+            result = self.chain({"question": user_input})
+            correct, response = self.response_parser(result, db)
+            
+            print(f"Try: {tries}\nResponse: \n{response}")
+            tries += 1
+        
         return response
