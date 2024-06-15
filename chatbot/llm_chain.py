@@ -74,7 +74,7 @@ Assistant:
             memory=self.memory,
             return_source_documents=True,
             return_generated_question=True,
-            get_chat_history=lambda h : ""
+            get_chat_history=lambda h : h
         )
 
     def response_parser(self, response, db):
@@ -96,4 +96,3 @@ Assistant:
         result = self.chain({"question": user_input})
         response = self.response_parser(result, db)
         return response
-
