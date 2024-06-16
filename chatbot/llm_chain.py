@@ -5,6 +5,7 @@ from langchain_community.llms import LlamaCpp
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 from langchain.prompts import PromptTemplate
+from llama_cpp.llama import LlamaGrammar
 
 from chatbot.data_preparation import get_vecdb
 
@@ -23,13 +24,38 @@ class Chat_bot():
         n_gpu_layers = -1 
         n_batch = 32 
 
+        schema = r'''
+        root ::= (
+        "{" newline
+            doublespace "\"response\":" space string "," newline
+            doublespace "\"support_request\":" space request newline
+        "}"
+        )
+        newline ::= "\n"
+        doublespace ::= "  "
+        space ::= " "
+        string ::= "\""   ([^"]*)   "\""
+        number ::= [0-9]+
+        request ::= (
+        "{" newline
+            doublespace "\"order_id\":" space number "," newline
+            doublespace "\"issue\":" space string newline
+        "}"
+
+        )
+        '''
+
+        grammar = LlamaGrammar.from_string(schema)
+
         self.llm = LlamaCpp(
             model_path=model_path,
             n_gpu_layers=n_gpu_layers,
             n_batch=n_batch,
             f16_kv=True,
             temperature=0.1,
-            stop=["Q", "Question", "User:", "Answer", "User's question", "Helpful Answer", "Unhelpful Answer", "Final Answer:", "Chat History", "Use the following pieces of context", "Other Helpful", "```", " } }"]
+            grammar=grammar,
+            n_ctx=640,
+            stop=["Q", "Question", "User:", "Answer", "User's question", "Helpful Answer", "Unhelpful Answer", "Final Answer:", "Chat History", "Use the following pieces of context", "Other Helpful", "```"]
         )
 
 # create prompt
@@ -38,24 +64,21 @@ You are a chatbot on a virtual platform selling T-Shirts called TeeCustomizer.
 When asked a question, first search the knowledge base for the most relevant question-answer pair.
 Please answer the user's question in json format and include a support_request attribute if the question is related to a support issue. Keep the answer as concise as possible.
 
-Example:
-User: I need help with my order. My order number is 12345 and it hasn't arrived yet.
-Assistant: {{
-    "response": "I'm sorry to hear that your order hasn't arrived yet. I'll log a support request for you.",
-    "support_request": {{
-        "issue": "Order not arrived",
-        "order_number": "12345"
-    }}
-}}
-
+Your responses should strictly follow the format below:
+    response: [main text of your response]
+    support_request: [fill this field only when users have some issues with their order or they want to make direct requests; otherwise set order id 0]
+    
 Chat History:
 {chat_history}
-    
+
+Context:
+{context}
+
 User:{question}
 Assistant:
 """
-        self.prompt = PromptTemplate(input_variables=["question", "chat_history"], template=template)
-        
+        self.prompt = PromptTemplate(input_variables=["question", "context", "chat_history"], template=template)
+
 # create chain
         self.memory = ConversationBufferMemory(
             memory_key="chat_history",  
@@ -69,8 +92,8 @@ Assistant:
             self.llm, 
             chain_type="stuff", 
             retriever=self.vecdb.as_retriever(search_type="similarity_score_threshold", 
-                                              search_kwargs={"score_threshold": 0.05, "k": 4}), 
-            condense_question_prompt=self.prompt,
+                                              search_kwargs={"score_threshold": 0.05, "k": 3}), 
+            combine_docs_chain_kwargs={"prompt": self.prompt},
             memory=self.memory,
             return_source_documents=True,
             return_generated_question=True,
@@ -78,21 +101,22 @@ Assistant:
         )
 
     def response_parser(self, response, db):
-        if "response" in response['answer'] and "}" in response['answer']:
-            try:
-                response_json = json.loads(response['answer'])
-                if "support_request" in response['answer']:
-                    support_request = response_json.get("support_request")
-                    db.collection('supportRequests').add(support_request)
+        try:
+            response_json = json.loads(response['answer'])
+            if response_json["support_request"]["order_id"] != 0:
+                db.collection('support_requests').add(response_json["support_request"])
                     
-            except json.JSONDecodeError:
-                return "There was an error parsing the response. Please try again."
+        except json.JSONDecodeError:
+            return False, "There was an error parsing the response. Please try again."
             
-            return response_json['response']
-        else:
-            return response['answer']
+        return True, response_json['response']
 
     def process_input(self, user_input, db):
-        result = self.chain({"question": user_input})
-        response = self.response_parser(result, db)
+        tries = 0
+        correct = False
+        while tries < 3 and not correct:
+            result = self.chain({"question": user_input})
+            correct, response = self.response_parser(result, db)
+            tries += 1
+        
         return response
