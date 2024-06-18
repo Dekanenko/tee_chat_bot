@@ -9,7 +9,7 @@ from llama_cpp.llama import LlamaGrammar
 
 from chatbot.data_preparation import get_vecdb
 
-class Chat_bot():
+class QuestionLogs():
 
     def __init__(self):
 
@@ -95,6 +95,7 @@ Assistant:
                                               search_kwargs={"score_threshold": 0.05, "k": 3}), 
             combine_docs_chain_kwargs={"prompt": self.prompt},
             memory=self.memory,
+            rephrase_question=False,
             return_source_documents=True,
             return_generated_question=True,
             get_chat_history=lambda h : h

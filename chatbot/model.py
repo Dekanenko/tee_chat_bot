@@ -1,12 +1,13 @@
 import json
 from chatbot.chains.orchestrator_chain import Orchestrator
-
-from chatbot.data_preparation import get_vecdb
+from chatbot.chains.question_logs_chain import QuestionLogs
 
 class Chat_bot():
 
     def __init__(self):
         self.orchestrator = Orchestrator()
+        self.question_logs_chain = QuestionLogs()
+        
 
     # def response_parser(self, response, db):
     #     try:
@@ -20,8 +21,9 @@ class Chat_bot():
     #     return True, response_json['response']
 
     def process_input(self, user_input, db):
-        result = self.orchestrator.process_input(user_input)
-        print(f"\n\n{result}\n\n")
-
+        chain = self.orchestrator.process_input(user_input)
+        result = "Go to 2nd chain"
+        if chain == 1:
+            result = self.question_logs_chain.process_input(user_input, db)
         
         return result
