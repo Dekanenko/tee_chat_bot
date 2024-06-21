@@ -43,44 +43,37 @@ class Orchestrator():
 
 # create prompt
         template="""
-You are an intelligent decision-making module for a T-shirt customization shop's chatbot. Your task is to analyze the user's input and determine the appropriate chain to handle their request.
-
-If the user's input is a question or an issue request, output the number 1.
-If the user's input provides details for a T-shirt order (e.g., color, size, design) or user says directly that they wants to make order, output the number 2.
-
 Analyze the following input and output only one number: 1 or 2.
+    If the user's input is a question or an issue request, output the number 1.
+    If the user's input provides details for a T-shirt customization (e.g., color, size, design, etc.) or user says directly that they want to make order, output the number 2.
 
-Example:
-User: I would like to customize a T-shirt
-Assistant:{{
-"chain": 2
-}}
-
-User: Tank Top
-Assistant:{{
-"chain": 2
-}}
-
-User: red
-Assistant:{{
-"chain": 2
-}}
+Use the following examples for better output:
 
 User: What printing options do you offer?
-Assistant:{{
-"chain": 1
-}}
-
-User: The t-shirt I ordered is missing from my delivery. My order number is 99876.
-Assistant:{{
-"chain": 1
-}}
-
-User: What materials are the t-shirts made from?
 Assistant: {{
     "chain": 1
 }}
 
+User: What printing options do you offer?
+Assistant: {{
+    "chain": 1
+}}
+
+User: The t-shirt I ordered is missing from my delivery. My order number is 99876.
+Assistant: {{
+    "chain": 1
+}}
+
+User: Crew Neck, V-Neck, Long Sleeve, Tank Top; red, purple; male, unisex; M, XL; Screen Printing, Embroidery, Heat Transfer, Direct-to-Garment
+Assistant: {{
+    "chain": 2
+}}
+
+User: I want to customize a T-shirt
+Assistant: {{
+    "chain": 2
+}}
+    
 User:{question}
 Assistant:
 """

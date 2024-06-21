@@ -12,8 +12,6 @@ class Chat_bot():
         
     def process_input(self, user_input, db):
         chain = self.orchestrator.process_input(user_input)
-
-        result = "Go to 2nd chain"
         if chain == 1:
             result = self.question_logs_chain.process_input(user_input, db)
         if chain == 2:
