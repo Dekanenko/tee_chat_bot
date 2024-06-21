@@ -1,7 +1,7 @@
 import chainlit as cl
 import firebase_admin
 from firebase_admin import credentials, firestore
-from chatbot.llm_chain import Chat_bot
+from chatbot.model import Chat_bot
 import os
 
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
