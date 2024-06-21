@@ -105,6 +105,8 @@ Assistant:
             
         return True, response_json['feature_value']
 
+    def submit_order(self, db):
+        db.collection('orders').add(self.order)
 
     def process_input(self, user_input, db):
         if self.order_counter == -1:
@@ -120,6 +122,7 @@ Assistant:
                 if "confirm" in feature_value or "yes" in feature_value:
                     order_id = random.randint(1, 99999)
                     self.order["order_id"] = order_id
+                    self.submit_order(db)
                     return "Hurray🥳, you have successfully ordered a T-shirt\nYour order id: "+str(order_id)
                 else:
                     return "Sory if I missed some information😖. Let's try again"
