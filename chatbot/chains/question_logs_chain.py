@@ -98,7 +98,7 @@ Assistant:
             rephrase_question=False,
             return_source_documents=True,
             return_generated_question=True,
-            get_chat_history=lambda h : h
+            get_chat_history=lambda h : ""
         )
 
     def response_parser(self, response, db):
