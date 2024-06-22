@@ -95,7 +95,7 @@ Assistant:
             """Any other preferences?""",
         ]
         
-        self.order_keys = ["style", "gender", "color", "size", "print_option", "preferences", "confirm"]
+        self.order_keys = ["style", "gender", "color", "size", "print_option", "preferences", "confirm/deny"]
 
     def response_parser(self, response):
         try:
@@ -134,7 +134,7 @@ Assistant:
                 out = "Please, verify the order:\n"
                 for key in self.order_keys[:-1]:
                     out += "- " + key + " : " + self.order[key] + "\n"
-                out += "\n\nEnter confirm, if the order is correct, enter no otherwise"
+                out += "\n\nEnter confirm, if the order is correct, enter deny otherwise"
                 return out
         
         return self.questions[self.order_counter]
