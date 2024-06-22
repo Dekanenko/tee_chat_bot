@@ -39,21 +39,85 @@ class OrderChain():
             f16_kv=True,
             temperature=0.1,
             grammar=grammar,
+            stop=["user:"] 
         )
 
 # create prompt
 #     feature_name: [put one of the following: undefined, style, gender, color, size, print_option, preferences]
         template = """
 Your task is to extract a provided feature from user's input. Extract information precisely, do not change that!
+If the user's input does not match with the given feature (e.g., style - red), output "-".
 Your responses should strictly follow the format below:
-    feature_value: [put the corresponing value that would fit a feature_name; put - if feature_name is undefined]
+    feature_value: [put the corresponding value that would fit the feature; put "-" otherwise]
 
-User:{question}
+Examples:
 
-Extract {order_question} from user's input
+Extract style.
+User: red.
+Assistant: {{
+    "feature_value": "-"
+}}
+
+Extract size.
+User: M.
+Assistant: {{
+    "feature_value": "M"
+}}
+
+Extract print_option.
+User: Embroidery.
+Assistant: {{
+    "feature_value": "Embroidery"
+}}
+
+Extract style.
+User: Tank Top.
+Assistant: {{
+    "feature_value": "Tank Top"
+}}
+
+Extract color.
+User: blue.
+Assistant: {{
+    "feature_value": "blue"
+}}
+
+Extract style.
+User: crew neck.
+Assistant: {{
+    "feature_value": "crew neck"
+}}
+
+Extract print_option.
+User: screen printing.
+Assistant: {{
+    "feature_value": "screen printing"
+}}
+
+Extract color.
+User: Not a color.
+Assistant: {{
+    "feature_value": "-"
+}}
+
+Extract size.
+User: purple.
+Assistant: {{
+    "feature_value": "-"
+}}
+
+Extract print_option.
+User: Heat Transfer.
+Assistant: {{
+    "feature_value": "Heat Transfer"
+}}
+
+User: {question}
+Extract {order_feature} from user's input.
 Assistant:
+
 """
-        self.prompt = PromptTemplate(input_variables=["question", "order_question"], template=template)
+        self.prompt = PromptTemplate(input_variables=["question", "order_feature"], template=template)
 
 # create chain
         self.chain = LLMChain(
@@ -101,9 +165,9 @@ Assistant:
         try:
             response_json = json.loads(response['text'])                    
         except json.JSONDecodeError:
-            return False, "There was an error parsing the response. Please try again."
+            return "-"
             
-        return True, response_json['feature_value']
+        return response_json['feature_value']
 
     def submit_order(self, db):
         db.collection('orders').add(self.order)
@@ -113,9 +177,12 @@ Assistant:
             self.order = {"style":"", "gender":"", "color":"", "size":"", "print_option":"", "preferences":"", "order_id":0}
             self.order_counter += 1
         else:
-            result = self.chain({"question": user_input, "order_question": self.order_keys[self.order_counter]})
+            result = self.chain({"question": user_input, "order_feature": self.order_keys[self.order_counter]})
+            feature_value = self.response_parser(result)
 
-            _, feature_value = self.response_parser(result)
+            if "-" == feature_value:
+                out = "Sorry, there might be a mistake😭. Could you please answer again to the following question:\n"+self.questions[self.order_counter]
+                return out
 
             if self.order_counter == len(self.order_keys)-1:
                 self.order_counter = -1
