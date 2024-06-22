@@ -47,6 +47,7 @@ Analyze the following input and output only one number: 1 or 2.
     If the user's input is a question (e.g., "What", "Which", "How", "Do you", "Can I") or an issue/request (e.g., "problem", "issue", "missing", "can't", "not working", "broken", "help", "order number"), output the number 1.
     If the user's input provides details for a T-shirt customization (e.g., color, size, design, etc.) or user says directly that they want to make order, output the number 2.
     If the user provides preferences for the order, output the number 2.
+    If the user's input contains "deny" of "confirm", output the number 2.
 
 Use the following examples for better output:
 
@@ -74,7 +75,7 @@ User: I want the materials to be eco-friendly
 Assistant: {{
     "chain": 2
 }}
-    
+   
 User:{question}
 Assistant:
 """
