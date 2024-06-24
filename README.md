@@ -29,7 +29,10 @@ chainlit run app.py
 ```
 
 ## Features
-- Chatbot uses RAG to provide more accurate information and answer questions
-- Log support and direct requests. Model recognizes the user's struggles and capture details like issue and order number, storing them in database
+- 3 chains were developed to make a Chatbot perform different tasks:
+    1st Chain answers user's questions and logs support requests for them. It recognizes users' struggles and direct requests, creating a support_request document and storing it in DB
+    2nd Chain gives the user a list of questions and parses its input, filling out the order form. Once the form is finished and the user's confirmation is obtained, the order is stored in DB
+    3rd Chain orchestrates input data. Once a user's input is obtained, this model decides where it should go: to the 1st chain or the 2nd. 
+- Chatbot uses RAG and memory to provide more accurate information and answer questions
 - Chainlit interface for interaction
 - Logging the runs from LLM using LangSmith
